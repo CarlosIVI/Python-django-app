@@ -1,0 +1,32 @@
+ {%  extends 'entrenador/base.html' %}   
+
+ {% block principal %}
+    <table class="table">
+        <thead>
+            <th>Nick</th>
+            <th>Nombre</th>
+            <th>Region</th>
+            <th>Medallas</th>
+            <th>Batallas</th>
+            <th>Fecha Ingreso</th>
+            <th>Pokemones</th>
+        </thead>
+        <tbody>
+            {% for entrenador in entrenadores %}
+                <tr>
+                    <td>{{entrenador.nick}}</td>
+                    <td>{{entrenador.nombre}}</td>
+                    <td>{{entrenador.region}}</td>
+                    <td>{{entrenador.medallas}}</td>
+                    <td>{{entrenador.batallas}}</td>
+                    <td>{{entrenador.fechaRegistro}}</td>
+                    <td>
+                        <a href="{% url 'listar_pokemones' id=entrenador.id %}">Pokemones</a>
+
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}
