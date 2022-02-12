@@ -72,7 +72,7 @@ jobs:
            command: 'package'
            chartPath: '$(Build.SourcesDirectory)/deploy_resources/k8s-deployment-app'        
         
-        - task: HelmDeployT@0
+        -task: HelmDeployT@0
         continueOnError: true
         displayName: Deploy to cluster
         inputs:
