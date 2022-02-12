@@ -23,22 +23,22 @@ variables:
 jobs:
 - job: CI
   steps:
- - bash: |
-     docker build -t $(AWS_ECR_REPOSITORY):$(Build.BuildNumber) $(Build.SourcesDirectory)/$(Application)
-   displayName: 'Build docker image'
+  - bash: |
+      docker build -t $(AWS_ECR_REPOSITORY):$(Build.BuildNumber) $(Build.SourcesDirectory)/$(Application)
+    displayName: 'Build docker image'
 
- - task: ECRPushImage@1
-   displayName: Push image to AWS ECR
+  - task: ECRPushImage@1
+    displayName: Push image to AWS ECR
     inputs:
-      awsCredentials: $(AWS_CREDENTIALS)
-      regionName: $(AWS_REGION)
-      imageSource: 'imagename'
-      sourceImageName: $(AWS_ECR_REPOSITORY)
-      sourceImageTag: $(Build.BuildNumber)
-      pushTag: $(Build.BuildNumber)
-      repositoryName: $(AWS_ECR_REPOSITORY)
-      logRequest: true
-      logResponse:
+       awsCredentials: $(AWS_CREDENTIALS)
+       regionName: $(AWS_REGION)
+       imageSource: 'imagename'
+       sourceImageName: $(AWS_ECR_REPOSITORY)
+       sourceImageTag: $(Build.BuildNumber)
+       pushTag: $(Build.BuildNumber)
+       repositoryName: $(AWS_ECR_REPOSITORY)
+       logRequest: true
+       logResponse:
 
 - deployment: CD
   displayName: Deployment
