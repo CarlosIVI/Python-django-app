@@ -3,7 +3,7 @@ kind: ClusterConfig
 metadata:
   name: devops-catalog
   region: us-east-2
-  version: "1.17"
+  version: "1.21"
 managedNodeGroups:
 - name: primary
   instanceType: t2.small
