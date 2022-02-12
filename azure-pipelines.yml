@@ -70,9 +70,10 @@ jobs:
         displayName: Package Helm Chart for $(Application)
         inputs:
            command: 'package'
-           chartPath: '$(Build.SourcesDirectory)/deploy_resources/k8s-deployment-app'        
-        
-        -task: HelmDeployT@0
+           chartPath: '$(Build.SourcesDirectory)/deploy_resources/k8s-deployment-app'
+
+           
+        - task: HelmDeploy@0
         continueOnError: true
         displayName: Deploy to cluster
         inputs:
