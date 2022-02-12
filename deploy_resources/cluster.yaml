@@ -1,35 +1,12 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
-
 metadata:
-  name: development
-  region: us-east-1
-  version: "1.21"
-
-vpc:
-  id: ""
-  cidr: "10.250.212.0/22"
-  clusterEndpoints:
-    publicAccess: true
-    privateAccess: true
-  subnets:
-    private:
-      private-one:
-        id: "subnet-021d61aa48289f3b0"
-        cidr: "10.250.212.0/24"
-      private-two:
-        id: "subnet-0f55b860e3f9c8dfe"
-        cidr: "10.250.213.0/24"
-      private-three:
-        id: "subnet-032f8250fa585731d"
-        cidr: "10.250.214.0/24"
-
+  name: devops-catalog
+  region: us-east-2
+  version: "1.17"
 managedNodeGroups:
-  - name: ng-1
-    instanceType: m5.large
-    desiredCapacity: 3
-    privateNetworking: true
-    subnets:
-      - private-one
-      - private-two
-      - private-three
+- name: primary
+  instanceType: t2.small
+  minSize: 2
+  maxSize: 3
+  spot: true
