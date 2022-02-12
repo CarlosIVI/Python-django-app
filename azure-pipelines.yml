@@ -20,68 +20,70 @@ variables:
 
 - group: AWS-ECR-Variables
 
-jobs:
-- job: CI
-  steps:
-  - bash: |
-      docker build -t $(AWS_ECR_REPOSITORY):$(Build.BuildNumber) $(Build.SourcesDirectory)/$(Application)
-    displayName: 'Build docker image'
+stages:
+- stage: CI
+  jobs:
+  - job:
+    steps:
+    - bash: |
+        docker build -t $(AWS_ECR_REPOSITORY):$(Build.BuildNumber) $(Build.SourcesDirectory)/$(Application)
+      displayName: 'Build docker image'
 
-  - task: ECRPushImage@1
-    displayName: Push image to AWS ECR
-    inputs:
-       awsCredentials: $(AWS_CREDENTIALS)
-       regionName: $(AWS_REGION)
-       imageSource: 'imagename'
-       sourceImageName: $(AWS_ECR_REPOSITORY)
-       sourceImageTag: $(Build.BuildNumber)
-       pushTag: $(Build.BuildNumber)
-       repositoryName: $(AWS_ECR_REPOSITORY)
-       logRequest: true
-       logResponse:
+    - task: ECRPushImage@1
+      displayName: Push image to AWS ECR
+      inputs:
+         awsCredentials: $(AWS_CREDENTIALS)
+         regionName: $(AWS_REGION)
+         imageSource: 'imagename'
+         sourceImageName: $(AWS_ECR_REPOSITORY)
+         sourceImageTag: $(Build.BuildNumber)
+         pushTag: $(Build.BuildNumber)
+         repositoryName: $(AWS_ECR_REPOSITORY)
+         logRequest: true
+         logResponse:
+- stage: CD
+  jobs:
+  - deployment:
+    displayName: Deployment
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: replacetokens@4
+            displayName: Replace tokens in values.yaml
+            inputs:
+               rootDirectory: '$(Build.SourcesDirectory)/deploy_resources/k8s-deployment-app'
+               targetFiles: 'values.yaml'
+               tokenPattern: custom
+               actionOnNoFiles: fail
+               tokenPrefix: '__'
+               tokenSuffix: '__'
 
-- deployment: CD
-  displayName: Deployment
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-        - task: replacetokens@4
-          displayName: Replace tokens in values.yaml
+          - task: replacetokens@4
+            displayName: Replace tokens in Chart.yaml
+            inputs:
+               rootDirectory: '$(Build.SourcesDirectory)/deploy_resources/k8s-deployment-app'
+               targetFiles: 'Chart.yaml'
+               tokenPattern: custom
+               actionOnNoFiles: fail
+               tokenPrefix: '__'
+               tokenSuffix: '__'
+
+          - task: HelmDeploy@0
+          displayName: Package Helm Chart for $(Application)
           inputs:
-             rootDirectory: '$(Build.SourcesDirectory)/deploy_resources/k8s-deployment-app'
-             targetFiles: 'values.yaml'
-             tokenPattern: custom
-             actionOnNoFiles: fail
-             tokenPrefix: '__'
-             tokenSuffix: '__'
+             command: 'package'
+             chartPath: '$(Build.SourcesDirectory)/deploy_resources/k8s-deployment-app'
 
-        - task: replacetokens@4
-          displayName: Replace tokens in Chart.yaml
+          - task: HelmDeploy@0
+          continueOnError: true
+          displayName: Deploy to cluster
           inputs:
-             rootDirectory: '$(Build.SourcesDirectory)/deploy_resources/k8s-deployment-app'
-             targetFiles: 'Chart.yaml'
-             tokenPattern: custom
-             actionOnNoFiles: fail
-             tokenPrefix: '__'
-             tokenSuffix: '__'
-
-        - task: HelmDeploy@0
-        displayName: Package Helm Chart for $(Application)
-        inputs:
-           command: 'package'
-           chartPath: '$(Build.SourcesDirectory)/deploy_resources/k8s-deployment-app'
-
-           
-        - task: HelmDeploy@0
-        continueOnError: true
-        displayName: Deploy to cluster
-        inputs:
-           namespace: 'python-app'
-           command: 'upgrade'
-           connectionType: Kubernetes Service Connection
-           kubernetesCluster: 'devops-catalog'
-           KubernetesServiceEndpoint: 'dev-python-app-1644697063739'
-           releaseName: $(Application)
-           chartType: filepath
-           chartPath: '$(Build.StagingDirectory)/k8s-deployment-app-$(Build.BuildNumber).tgz'
+             namespace: 'python-app'
+             command: 'upgrade'
+             connectionType: Kubernetes Service Connection
+             kubernetesCluster: 'devops-catalog'
+             KubernetesServiceEndpoint: 'dev-python-app-1644697063739'
+             releaseName: $(Application)
+             chartType: filepath
+             chartPath: '$(Build.StagingDirectory)/k8s-deployment-app-$(Build.BuildNumber).tgz'
