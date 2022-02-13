@@ -1,4 +1,4 @@
-name: $(Major).$(Minor).$(Patch).$(Rev:r)
+name: $(Major).$(Minor).$(Rev:r)
 
 trigger:
 - main
@@ -15,11 +15,7 @@ variables:
 - name: Minor
   value: '0'
 
-- name: Patch
-  value: '0'
-
 - group: AWS-ECR-Variables
-
 
 stages:
 - stage: CI
