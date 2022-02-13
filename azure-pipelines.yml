@@ -41,7 +41,9 @@ stages:
          repositoryName: $(AWS_ECR_REPOSITORY)
          logRequest: true
          logResponse:
+         
 - stage: CD
+  pool: Default
   jobs:
   - deployment:
     displayName: Deployment
@@ -70,20 +72,21 @@ stages:
                tokenSuffix: '__'
 
           - task: HelmDeploy@0
-          displayName: Package Helm Chart for $(Application)
-          inputs:
+            displayName: Package Helm Chart for $(Application)
+            inputs:
              command: 'package'
              chartPath: '$(Build.SourcesDirectory)/deploy_resources/k8s-deployment-app'
 
+
           - task: HelmDeploy@0
-          continueOnError: true
-          displayName: Deploy to cluster
-          inputs:
-             namespace: 'python-app'
-             command: 'upgrade'
-             connectionType: Kubernetes Service Connection
-             kubernetesCluster: 'devops-catalog'
-             KubernetesServiceEndpoint: 'dev-python-app-1644697063739'
-             releaseName: $(Application)
-             chartType: filepath
-             chartPath: '$(Build.StagingDirectory)/k8s-deployment-app-$(Build.BuildNumber).tgz'
+            continueOnError: true
+            displayName: Deploy to cluster
+            inputs:
+               namespace: 'python-app'
+               command: 'upgrade'
+               connectionType: Kubernetes Service Connection
+               kubernetesCluster: 'devops-catalog'
+               KubernetesServiceEndpoint: 'dev-python-app-1644697063739'
+               releaseName: $(Application)
+               chartType: filepath
+               chartPath: '$(Build.StagingDirectory)/k8s-deployment-app-$(Build.BuildNumber).tgz'
