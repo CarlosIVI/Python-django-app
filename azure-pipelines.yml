@@ -1,10 +1,9 @@
-name: $(Major)-$(Minor)-$(Patch)-$(Rev:r)
+name: $(Major).$(Minor).$(Patch).$(Rev:r)
 
 trigger:
 - main
 
 pool: Default
-
 
 variables:
 - name: Application
@@ -89,7 +88,7 @@ stages:
                command: 'upgrade'
                connectionType: Kubernetes Service Connection
                kubernetesCluster: 'devops-catalog'
-               KubernetesServiceEndpoint: 'dev-python-app-1644697063739'
+               KubernetesServiceEndpoint: 'dev-python-app-1644715730033'
                releaseName: $(Application)
                chartType: filepath
                chartPath: '$(Build.StagingDirectory)/k8s-deployment-app-$(Build.BuildNumber).tgz'
