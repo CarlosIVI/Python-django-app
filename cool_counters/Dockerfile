@@ -5,4 +5,4 @@ COPY . /home/app/
 RUN pip install django
 RUN python manage.py migrate
 
-ENTRYPOINT ["python", "./manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["python", "./manage.py", "runserver", "0.0.0.0:80"]
