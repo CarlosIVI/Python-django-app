@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: python-simple-app
+  repository: __AWS_ECR_REPO_FULL_NAME__
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "__Build.BuildNumber__"
