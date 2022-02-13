@@ -89,6 +89,6 @@ stages:
                connectionType: Kubernetes Service Connection
                kubernetesCluster: 'devops-catalog'
                KubernetesServiceEndpoint: 'dev-python-app-1644715730033'
-               releaseName: $(Application)
+               releaseName: 'counter'
                chartType: filepath
                chartPath: '$(Build.StagingDirectory)/k8s-deployment-app-$(Build.BuildNumber).tgz'
