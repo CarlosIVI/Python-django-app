@@ -21,6 +21,13 @@ variables:
 
 - group: AWS-ECR-Variables
 
+resources:
+  repositories:
+  - repository: Python-django-app
+    type: git
+    name: 'CarlosIVI/Python-django-app'
+    ref: 'refs/head/main'
+
 stages:
 - stage: CI
   jobs:
