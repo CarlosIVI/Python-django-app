@@ -1,4 +1,4 @@
-name: $(Major)-$(Minor)-$(Patch)-$(Rev:,r)
+name: $(Major)-$(Minor)-$(Patch)-$(Rev:r)
 
 trigger:
 - main
@@ -28,7 +28,7 @@ stages:
   - job:
     steps:
     - bash: |
-        docker build -t $(AWS_ECR_REPOSITORY):$(Build.BuildNumber) $(Build.SourcesDirectory)/$(Application)
+        docker build -t $(AWS_ECR_REPOSITORY)-$(Build.BuildNumber) $(Build.SourcesDirectory)/$(Application)
       displayName: 'Build docker image'
 
     - task: ECRPushImage@1
