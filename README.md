@@ -4,12 +4,12 @@ This repo contain a simple Django App deployed in a Amazon Elastic Kubernetes Se
 
 ## Software used
 
-* [kubernetes](https://github.com/kubernetes/kubernetes)
-* [docker](https://github.com/docker/docker-ce)
-* [helm](https://helm.sh/docs/)
-* [eksctl](https://eksctl.io/introduction/)
-* [python](https://www.python.org)
-* [django](https://www.djangoproject.com)
+* [Kubernetes](https://github.com/kubernetes/kubernetes)
+* [Docker](https://github.com/docker/docker-ce)
+* [Helm](https://helm.sh/docs/)
+* [Eksctl](https://eksctl.io/introduction/)
+* [Python](https://www.python.org)
+* [Django](https://www.djangoproject.com)
 
 ## Structure of the repo
 
