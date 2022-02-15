@@ -175,7 +175,7 @@ AWS_ECR_REPOSITORY
 AWS_REGION
 ```
 
-###Continious Integration Phase
+##Continious Integration Phase
 
 There is a simple bash script to build the Docker Image and a task to push it into the AWS ECR
 
@@ -203,7 +203,7 @@ stages:
          logResponse:
 ```
 
-###Continious Integration Phase
+##Continious Deployment Phase
 
 First is necesary replace the tokens decribed on the Helm chart of k8s-deployment-app, this is made by the task ReplaceTokens
 
